@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}创作诗词 - 诗歌创作平台{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-pen-fancy"></i> 创作新诗词</h3>
+                <p class="text-muted">写下您的灵感，AI将为您生成配图</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="poetryForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">诗词标题</label>
+                        <input type="text" class="form-control" id="title" name="title" required
+                               placeholder="请输入诗词标题">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="author" class="form-label">作者</label>
+                        <input type="text" class="form-control" id="author" name="author" 
+                               placeholder="请输入作者姓名（可选）">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">诗词内容</label>
+                        <textarea class="form-control" id="content" name="content" rows="10" required
+                                  placeholder="请输入您的诗词内容..."></textarea>
+                        <div class="form-text">AI将根据您的诗词内容自动生成配图</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> 返回
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存并生成配图
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('poetryForm').addEventListener('submit', function(e) {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在生成配图...';
+    submitBtn.disabled = true;
+    
+    // 如果生成时间过长，恢复按钮状态
+    setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }, 30000);
+});
+</script>
+{% endblock %}

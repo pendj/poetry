@@ -1,0 +1,10 @@
+# 复制此文件为 .env 并填入您的配置
+
+# Flask配置
+SECRET_KEY=your-secret-key-here
+
+# 数据库配置
+DATABASE_URL=sqlite:///poetry.db
+
+# Google Gemini API密钥
+GEMINI_API_KEY=your-gemini-api-key-here

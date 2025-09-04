@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ poetry.title }} - 诗歌创作平台{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3><i class="fas fa-feather-alt"></i> {{ poetry.title }}</h3>
+                <div>
+                    <a href="{{ url_for('poetry.edit', id=poetry.id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-edit"></i> 编辑
+                    </a>
+                    <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-arrow-left"></i> 返回
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- 图片展示区域 -->
+                    <div class="col-md-6">
+                        <div class="image-container">
+                            {% if poetry.image_path %}
+                                <img src="{{ url_for('static', filename='images/' + poetry.image_path) }}" 
+                                     class="poetry-image" alt="{{ poetry.title }}">
+                                <div class="mt-3">
+                                    <a href="{{ url_for('poetry.download_image', id=poetry.id) }}" 
+                                       class="btn btn-success">
+                                        <i class="fas fa-download"></i> 下载图片
+                                    </a>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="fas fa-image fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">暂无配图</p>
+                                    <div class="alert alert-warning" role="alert">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        配图生成失败，可能是API配额限制或网络问题
+                                    </div>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-primary" onclick="regenerateImage({{ poetry.id }})">
+                                            <i class="fas fa-magic"></i> 重新生成配图
+                                        </button>
+                                        <a href="{{ url_for('poetry.edit', id=poetry.id) }}" class="btn btn-outline-secondary">
+                                            <i class="fas fa-edit"></i> 编辑诗词
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- 诗词内容区域 -->
+                    <div class="col-md-6">
+                        <div class="poetry-info">
+                            <div class="mb-3">
+                                <h5 class="poetry-title">{{ poetry.title }}</h5>
+                                <p class="text-muted">
+                                    <i class="fas fa-user"></i> 作者: {{ poetry.author }}<br>
+                                    <i class="fas fa-calendar"></i> 创作时间: {{ poetry.created_at.strftime('%Y年%m月%d日 %H:%M') }}
+                                </p>
+                            </div>
+                            
+                            <div class="poetry-content">
+                                {{ poetry.content|replace('\n', '<br>')|safe }}
+                            </div>
+                            
+                            {% if poetry.image_prompt %}
+                            <div class="mt-4">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i> 配图说明: {{ poetry.image_prompt }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function regenerateImage(poetryId) {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    // 显示加载状态
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在生成配图...';
+    button.disabled = true;
+    
+    // 发送AJAX请求
+    fetch(`/poetry/${poetryId}/regenerate-image`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // 重新加载页面以显示新图片
+            window.location.reload();
+        } else {
+            alert('重新生成配图失败: ' + data.error);
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('网络错误，请重试');
+        button.innerHTML = originalText;
+        button.disabled = false;
+    });
+}
+</script>
+{% endblock %}

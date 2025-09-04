@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}API状态检查 - 诗歌创作平台{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-cogs"></i> API状态检查</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-key"></i> Gemini API状态</h5>
+                        <div id="api-status" class="mb-3">
+                            <span class="badge bg-secondary">检查中...</span>
+                        </div>
+                        
+                        <h5><i class="fas fa-info-circle"></i> 配额信息</h5>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-clock"></i> 免费配额：每日15次请求</li>
+                            <li><i class="fas fa-clock"></i> 每分钟限制：1次请求</li>
+                            <li><i class="fas fa-calendar"></i> 配额重置：每日UTC 00:00</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-tools"></i> 解决方案</h5>
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-lightbulb"></i> 如果配额用完：</h6>
+                            <ul class="mb-0">
+                                <li>等待配额重置（每日UTC 00:00）</li>
+                                <li>升级到付费计划</li>
+                                <li>使用其他AI图像生成服务</li>
+                            </ul>
+                        </div>
+                        
+                        <h5><i class="fas fa-link"></i> 相关链接</h5>
+                        <ul class="list-unstyled">
+                            <li><a href="https://ai.google.dev/gemini-api/docs/rate-limits" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> API配额说明
+                            </a></li>
+                            <li><a href="https://ai.google.dev/gemini-api/docs/pricing" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> 定价信息
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> 返回首页
+                    </a>
+                    <button type="button" class="btn btn-outline-primary" onclick="checkApiStatus()">
+                        <i class="fas fa-sync"></i> 重新检查
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function checkApiStatus() {
+    const statusElement = document.getElementById('api-status');
+    statusElement.innerHTML = '<span class="badge bg-secondary">检查中...</span>';
+    
+    // 这里可以添加实际的API状态检查逻辑
+    // 由于安全原因，我们不会直接暴露API密钥状态
+    setTimeout(() => {
+        statusElement.innerHTML = '<span class="badge bg-warning">需要手动检查</span>';
+    }, 1000);
+}
+
+// 页面加载时自动检查
+document.addEventListener('DOMContentLoaded', checkApiStatus);
+</script>
+{% endblock %}

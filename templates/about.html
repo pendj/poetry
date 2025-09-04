@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}关于我们 - 诗歌创作平台{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-info-circle"></i> 关于诗歌创作平台</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-feather-alt"></i> 平台介绍</h5>
+                        <p>诗歌创作平台是一个集成了AI图像生成功能的现代化诗词创作和管理系统。我们致力于为诗词爱好者提供一个优雅、便捷的创作环境。</p>
+                        
+                        <h5><i class="fas fa-magic"></i> 核心功能</h5>
+                        <ul>
+                            <li>诗词创作与编辑</li>
+                            <li>AI智能配图生成</li>
+                            <li>图片下载与分享</li>
+                            <li>响应式设计界面</li>
+                            <li>数据持久化存储</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-cogs"></i> 技术特色</h5>
+                        <ul>
+                            <li>Flask + SQLAlchemy 后端框架</li>
+                            <li>Google Gemini AI 图像生成</li>
+                            <li>Bootstrap 5 响应式前端</li>
+                            <li>SQLite 轻量级数据库</li>
+                            <li>模块化架构设计</li>
+                        </ul>
+                        
+                        <h5><i class="fas fa-heart"></i> 设计理念</h5>
+                        <p>我们相信，每一首诗词都有其独特的意境和情感。通过AI技术，我们希望能够为您的文字创作提供视觉上的灵感，让诗词与图像完美融合。</p>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+                        <i class="fas fa-home"></i> 返回首页
+                    </a>
+                    <a href="{{ url_for('poetry.create') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> 开始创作
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

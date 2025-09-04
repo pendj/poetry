@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}编辑诗词 - {{ poetry.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3><i class="fas fa-edit"></i> 编辑诗词</h3>
+                <p class="text-muted">修改您的诗词内容，系统将重新生成配图</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="editForm">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">诗词标题</label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               value="{{ poetry.title }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="author" class="form-label">作者</label>
+                        <input type="text" class="form-control" id="author" name="author" 
+                               value="{{ poetry.author }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">诗词内容</label>
+                        <textarea class="form-control" id="content" name="content" rows="10" required>{{ poetry.content }}</textarea>
+                        <div class="form-text">修改内容后，系统将重新生成配图</div>
+                    </div>
+                    
+                    {% if poetry.image_path %}
+                    <div class="mb-3">
+                        <label class="form-label">当前配图</label>
+                        <div class="text-center">
+                            <img src="{{ url_for('static', filename='images/' + poetry.image_path) }}" 
+                                 class="img-thumbnail" style="max-width: 200px;" alt="当前配图">
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('poetry.view', id=poetry.id) }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-arrow-left"></i> 取消
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> 保存并重新生成配图
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('editForm').addEventListener('submit', function(e) {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在重新生成配图...';
+    submitBtn.disabled = true;
+    
+    // 如果生成时间过长，恢复按钮状态
+    setTimeout(() => {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    }, 30000);
+});
+</script>
+{% endblock %}

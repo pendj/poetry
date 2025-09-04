@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}诗歌创作平台 - 首页{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2><i class="fas fa-feather-alt"></i> 我的诗歌集</h2>
+                <p class="text-muted">用文字描绘心灵，用AI创造视觉</p>
+            </div>
+            <div class="card-body">
+                {% if poems %}
+                    <div class="row">
+                        {% for poem in poems %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                {% if poem.image_path %}
+                                <div class="image-container">
+                                    <img src="{{ url_for('static', filename='images/' + poem.image_path) }}" 
+                                         class="poetry-image" alt="{{ poem.title }}">
+                                </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title poetry-title">{{ poem.title }}</h5>
+                                    <p class="card-text">
+                                        <small class="text-muted">作者: {{ poem.author }}</small><br>
+                                        <small class="text-muted">{{ poem.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    </p>
+                                    <p class="poetry-content">{{ poem.content[:100] }}{% if poem.content|length > 100 %}...{% endif %}</p>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="btn-group w-100" role="group">
+                                        <a href="{{ url_for('poetry.view', id=poem.id) }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-eye"></i> 查看
+                                        </a>
+                                        <a href="{{ url_for('poetry.edit', id=poem.id) }}" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-edit"></i> 编辑
+                                        </a>
+                                        {% if poem.image_path %}
+                                        <a href="{{ url_for('poetry.download_image', id=poem.id) }}" class="btn btn-outline-success btn-sm">
+                                            <i class="fas fa-download"></i> 下载
+                                        </a>
+                                        {% endif %}
+                                        <a href="{{ url_for('poetry.delete', id=poem.id) }}" 
+                                           class="btn btn-outline-danger btn-sm"
+                                           data-title="{{ poem.title }}"
+                                           onclick="return confirm('确定要删除这首诗词吗？')">
+                                            <i class="fas fa-trash"></i> 删除
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-feather-alt fa-3x text-muted mb-3"></i>
+                        <h4 class="text-muted">还没有创作任何诗词</h4>
+                        <p class="text-muted">开始您的诗歌创作之旅吧！</p>
+                        <a href="{{ url_for('poetry.create') }}" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> 创作第一首诗词
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
