@@ -8,3 +8,11 @@ DATABASE_URL=sqlite:///poetry.db
 
 # Google Gemini API密钥
 GEMINI_API_KEY=your-gemini-api-key-here
+
+# 代理配置 (可选)
+# 如果您的网络环境需要代理访问外部API，请取消注释并配置以下选项之一：
+# 注意：代理URL必须包含完整的协议前缀 (http:// 或 https://)
+# HTTP_PROXY=http://127.0.0.1:10808
+# HTTPS_PROXY=http://127.0.0.1:10808
+# ALL_PROXY=http://127.0.0.1:10808
+# PROXY_URL=http://127.0.0.1:10808
